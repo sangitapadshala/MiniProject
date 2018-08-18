@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx">
+
+	<import resource="db-config.xml" />
+	
+	<context:component-scan base-package="lti.service,lti.repo"/>
+
+	<bean id="factory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="ds" />
+		<property name="hibernateProperties">
+			<value>
+				hibernate.dialect=org.hibernate.dialect.Oracle10gDialect
+				hibernate.hbm2ddl.auto=update
+				hibernate.show_sql=true
+			</value>
+		</property>
+		<property name="annotatedClasses">
+			<list>
+				<value>lti.entity.User</value>
+				<value>lti.entity.Feed</value>
+				<value>lti.entity.Comment</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="txManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="factory" />
+	</bean>
+
+</beans>
